@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+:root{
+    background-color: aliceblue;
+    color: black;
+}
+
+/* In your CSS file */
+/* @media screen and (max-width: 768px) {
+  // Example: Hide a specific column by targeting its class or data attribute 
+  .hide-on-mobile {
+    display: none;
+  }
+} */

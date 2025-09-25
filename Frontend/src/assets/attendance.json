@@ -1,0 +1,130 @@
+[
+    {
+        "date" : "2023-10-15",
+        "rollNo": "1",
+        "status": "present",
+        "department": "BCA",
+    "year": "2",
+    "fullName": "John Doe"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "2",
+        "status": "absent",
+        "department": "BCA",
+    "year": "3",
+    "fullName": "Alice Smith"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "3",
+        "status": null,
+         "department": "BBA",
+    "year": "1",
+     "fullName": "Emily Johnson"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "4",
+        "status": "absent",
+         "department": "BBT",
+    "year": "4",
+    "fullName": "David Brown"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "5",
+        "status": "present",
+    "fullName": "Michael Wilson",
+"department": "BBA",
+    "year": "2"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "6",
+        "status": null,
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Sarah Connor"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "7",
+        "status": null,
+        "department": "BBA",
+        "year": "2",
+        "fullName": "James Cameron"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "8",
+        "status": null,
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Chris Evans"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "9",
+        "status": null,
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Tom Holland"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "10",
+        "status": "absent",
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Scarlett Johansson"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "11",
+        "status": "present",
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Chris Hemsworth"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "12",
+        "status": "absent",
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Scarlett Johansson"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "13",
+        "status": "present",
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Tom Hardy"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "14",
+        "status": "absent",
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Natalie Portman"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "15",
+        "status": "present",
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Chris Evans"
+    },
+    {
+        "date" : "2023-10-15",
+        "rollNo": "16",
+        "status": "absent",
+        "department": "BBA",
+        "year": "2",
+        "fullName": "Scarlett Johansson"
+    }
+]

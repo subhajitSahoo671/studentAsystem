@@ -1,0 +1,50 @@
+[
+    {
+        "department": "BBA",
+        "year": "2",
+        "fullName": "rfrfvvv Wilson",
+        "rollNo": "6",
+        "pay_fees": 12000,
+        "pay_date": "2024-06-15"
+    },
+    {
+        "department": "BBA",
+        "year": "2",
+        "fullName": "rfrfvvv Wilson",
+        "rollNo": "6",
+        "pay_fees": 24000,
+        "pay_date": "2024-07-15"
+    },
+    {
+        "department": "BBA",
+        "year": "2",
+        "fullName": "rfrfvvv Wilson",
+        "rollNo": "6",
+        "pay_fees": 12000,
+        "pay_date": "2024-08-15"
+    },
+    {
+        "department": "BBA",
+        "year": "2",
+        "fullName": "rfrfvvv Wilson",
+        "rollNo": "6",
+        "pay_fees": 21000,
+        "pay_date": "2024-09-15"
+    },
+    {
+        "department": "BBA",
+        "year": "2",
+        "fullName": "rfrfvvv Wilson",
+        "rollNo": "6",
+        "pay_fees": 12200,
+        "pay_date": "2024-10-15"
+    },
+    {
+         "department": "BBA",
+        "year": "2",
+        "fullName": "Michael Wilson",
+       "rollNo": "5",
+        "pay_fees": 21500,
+        "pay_date": "2024-06-16"
+    }
+]
