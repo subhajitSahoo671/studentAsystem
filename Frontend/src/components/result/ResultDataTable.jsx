@@ -28,6 +28,8 @@ export const StdMarkInputs = ({Id,onAccuredMarkChange, totalMark}) => {
     useEffect(() => {
     if (onAccuredMarkChange) {
       onAccuredMarkChange(Id, marks.accuredMark, marks.totalMark);
+     // console.log(Id, marks.accuredMark, marks.totalMark);
+      
     }
   }, [marks.accuredMark, marks.totalMark, Id, onAccuredMarkChange]);
 
@@ -66,7 +68,7 @@ export const StdMarkInputs = ({Id,onAccuredMarkChange, totalMark}) => {
             <div className="flex space-x-3">
             <input type="number" placeholder="Total Mark" name="totalMark"
             required
-            value={totalMark}
+            value={marks.totalMark}
             onChange={(e) => {
                  handleChange(e)
                 }} 

@@ -1,9 +1,12 @@
 import express from "express";
 import {
+  addresult,
   addStudent,
   adminLogin,
   adminViewAllStudents,
+  attendanceReport,
   deleteStudent,
+  markAttendance,
   takeAttendance,
   UpdateStudent,
 } from "../controller/admin.controller.js";
@@ -23,9 +26,19 @@ router.put("/updatestudent/:studentId",
 router.delete("/deletestudent/:studentId",  
   //adminMiddleware,
   deleteStudent);
-router.post("/takeattendance",
+router.get("/takeattendance",
   //adminMiddleware, 
   defaultAttendanceMiddleware,
   takeAttendance);
+router.put("/markAttendance/:studentId",
+  //adminMiddleware, 
+  markAttendance);
+router.get("/attendanceReport",
+  //adminMiddleware, 
+  attendanceReport
+);
+router.post("/addresult",
+  //adminMiddleware,
+  addresult);
 
 export default router;

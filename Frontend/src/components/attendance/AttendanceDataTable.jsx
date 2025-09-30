@@ -1,4 +1,5 @@
 
+import axios from "axios"
 import { Link } from "react-router-dom"
 
 export const colomns=[
@@ -16,11 +17,21 @@ export const colomns=[
 //         ]
 
 
-export const AttendanceButtons = ({status, Id, statusChange}) => {
-    const markStudent = (status, Id) => {
+export const AttendanceButtons = ({status, Id, statusChange, formdata}) => {
+   // console.log(status, Id);
+    
+    const markStudent = async(status, Id) => {
     console.log(`Marking student ${Id} as ${status}`);
-    if(status){
-        statusChange();
+    try {
+        const response = await axios.put(`http://localhost:4000/api/v1/admin/markAttendance/${Id}`, { status: status });
+        if (response.data.success) {
+            console.log(response.data.message);
+                statusChange(formdata);
+            }else {
+                console.error("Error marking attendance:", response.data.error);
+            }
+    } catch (error) {
+        console.error("Error marking attendance:", error);
     }
 }
     return(
@@ -29,11 +40,11 @@ export const AttendanceButtons = ({status, Id, statusChange}) => {
                status == null ? (
                     <div className="flex space-x-2 md:space-x-5">
                         <button 
-                        onClick={() => markStudent("Present", Id)}
+                        onClick={() => markStudent("present", Id)}
                         className="bg-gradient-to-br from-green-500 to-green-300 text-white px-3 md:px-4 py-1 cursor-pointer">
                             Present
                         </button>
-                        <button onClick={() => markStudent("Absent", Id)}
+                        <button onClick={() => markStudent("absent", Id)}
                          className="bg-gradient-to-br from-red-500 to-red-300 text-white px-3 md:px-4 py-1 cursor-pointer">
                             Absent
                         </button>

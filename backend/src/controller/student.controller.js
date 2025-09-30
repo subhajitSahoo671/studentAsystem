@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../../config.js";
 import signupSchema from "../models/stdSignup.model.js";
-import { AttendanceSchema } from "../models/takeAttendance.model.js";
+import { takeattendance } from "../models/takeAttendance.model.js";
 
 //view student
 export const students = async (req, res) => {
@@ -133,7 +133,7 @@ export const attendance = async (req, res) => {
 
   try {
     const user = await studentSchema.findById(studentId);
-    const response = await AttendanceSchema.find({
+    const response = await takeattendance.find({
       year: user.year,
       department: user.department,
     });

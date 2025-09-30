@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import config from "../../config.js";
 import { v2 as cloudinary } from "cloudinary";
 import { takeattendance } from "../models/takeAttendance.model.js";
+import {Result} from "../models/addResult.model.js";
 
 //admin login
 export const adminLogin = async (req, res) => {
@@ -193,7 +194,7 @@ export const adminViewAllStudents = async (req, res) => {
     
     if(!data){
         console.log("No data found");
-        res.status(404).json("student data not found")
+        res.status(404).json({ error: "student data not found" });
     }else{
         console.log('data fetch succesfully');
         res.status(200).json(data);
@@ -373,3 +374,95 @@ export const takeAttendance = async (req, res) => {
       res.status(500).json({ error: error.message, success: false });
   }
 };
+
+//mark attendance
+export const markAttendance = async (req, res) => {
+
+  try {
+     const { studentId } = req.params;
+     const { status } = req.body;
+     const date = new Date().toISOString().split('T')[0]; // Get current date in "yyyy-mm-dd" format
+
+    // if (!studentId || !status) {
+    //   return res.status(400).json({ error: "Student ID and status are required" ,studentId, status});
+    // }
+    const student = await StudentSchema.findById({ _id: studentId });
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+    const updatedAttendance = await takeattendance.findOneAndUpdate(
+      { stdId: student._id, date },
+      { status },
+      { new: true }
+    );
+
+    if (!updatedAttendance) {
+      return res.status(404).json({ error: "Attendance record not found" });
+    }
+
+    res.status(200).json({ message: "Attendance marked successfully", updatedAttendance, success: true });
+  } catch (error) {
+    console.log("ERROR !! in markAttendance controller:", error);
+    res.status(500).json({ error: error.message, success: false });
+  }
+};
+
+//attendance report
+export const attendanceReport = async (req, res) => {
+  try {
+    const {date, limit = 5, skip = 0} = req.query;
+    const query = {};
+    
+   if(date){
+    query.date = date;
+   }
+
+   // const totalRecords = await takeattendance.countDocuments(query);
+    const attendanceRecords = await takeattendance.find(query)
+      .populate({
+        path: 'stdId',
+        select: 'studentName rollNo department year'
+      })
+      .sort({date: -1})
+      .skip(parseInt(skip))
+      .limit(parseInt(limit))
+
+      const groupedRecords = attendanceRecords.reduce((result, record) => {
+        const recordDate = record.date;
+        if (!result[recordDate]) {
+          result[recordDate] = [];
+        }
+        result[recordDate].push(record);
+        return result;
+      }, {});
+
+    res.status(200).json({ attendanceRecords, groupedRecords, success: true });
+  } catch (error) {
+    console.log("ERROR !! in attendanceReport controller:", error);
+    res.status(500).json({ error: error.message, success: false });
+  }
+}
+  
+//add result
+export const addresult = async (req,res) => {
+ try {
+   const {marks} = req.body;
+
+   if(!marks || Object.keys(marks).length === 0){
+     return res.status(400).json({error:"please provide all required fields"});
+   }
+    const studentIds = Object.keys(marks);
+   const results = studentIds.map(studentId => {
+     return {
+       studentId,
+       marks: marks[studentId]
+     };
+   });
+    await Result.insertMany(results);
+   res.status(201).json({message:"Result added successfully", success:true});
+ } catch (error) {
+   console.log("ERROR !! in addresult controller:", error);
+   res.status(500).json({ error: error.message, success: false });
+ }
+
+}

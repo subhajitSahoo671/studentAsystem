@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component'
 import { colomns, StdMarkInputs  } from './ResultDataTable'
 import Selectdepartment from '../Selectdepartment'
-import studentinfo from "../../assets/studentInfo.json"
+//import studentinfo from "../../assets/studentInfo.json"
+import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
@@ -28,10 +29,10 @@ const Addresult = () => {
       const totalMarkinputref = createRef()
       const examtypeinputref = createRef()
 
-    const handleAccuredMarkChange = (rollNo, accuredMark, totalMark) => {
+    const handleAccuredMarkChange = (id, accuredMark, totalMark) => {
       setMarksMap(prev => ({
         ...prev,
-        [rollNo]: { accuredMark, totalMark, Exam }
+        [id]: { accuredMark, totalMark, Exam }
       }));
     };
     
@@ -55,15 +56,19 @@ const Addresult = () => {
           }
 
       useEffect(() => {
-        const fetchStudents = () => {
+        const fetchStudents = async () => {
           setLoading(true)
           try {
-            const responnse = studentinfo;
-            setAlldata(responnse)
-          } catch (error) {
-            if(!responnse){
-              alert(error)
+            const response = await axios.get("http://localhost:4000/api/v1/admin/viewstudents");
+            if(response.status === 200){
+              setAlldata(response.data);
             }
+            else{
+              console.error(response.data.error);
+            }
+          } catch (error) {
+              console.error(error);
+              alert(error.response)
           }
            finally{
               setLoading(false)
@@ -76,10 +81,10 @@ const Addresult = () => {
          const filteredStudent = alldata.filter(std => (std.department == formdata.department)&&(std.year == (formdata.year?formdata.year:std.year)))  
            if(filteredStudent){
               const data = filteredStudent.map((std) => ({
-                name: <div className='flex flex-col py-3 md:py-0'><div className='font-semibold text-[15px] md:font-normal md:text-[13.5px]'>{std.fullName}</div><div className='md:hidden block'>Roll No. - {std.rollNo}</div></div>,
+                name: <div className='flex flex-col py-3 md:py-0'><div className='font-semibold text-[15px] md:font-normal md:text-[13.5px]'>{std.studentName}</div><div className='md:hidden block'>Roll No. - {std.rollNo}</div></div>,
                 Department: std.department,
                 Roll_No: std.rollNo,
-                Marks: (<StdMarkInputs Id={std.rollNo} onAccuredMarkChange={handleAccuredMarkChange} totalMark = {totalMark} />) 
+                Marks: (<StdMarkInputs Id={std._id} onAccuredMarkChange={handleAccuredMarkChange} totalMark = {totalMark} />) 
               }))
               
               setStudents(data)
@@ -121,11 +126,32 @@ const Addresult = () => {
         setFilteredStudent(filteredData);
       };
       
-      const handleTable = (e) => {
+      const handleTable = async(e) => {
        e.preventDefault()
-        
         //const rollNo = Object.keys(marksMap);
-        console.log(marksMap);
+        //console.log(marksMap);
+        try {
+          const response = await axios.post("http://localhost:4000/api/v1/admin/addresult", {
+            marks: marksMap
+          });
+          if (response.data.success) {
+             console.log("Result added successfully", response.data);
+            alert(response.data.message);
+              window.location.reload();
+          }
+          else {
+            alert(response.data.error);
+            console.log("Error adding result:", response.data.error);
+            
+          }
+        } catch (error) {
+          console.error("Error adding result:", error);
+          alert( error.response.data.error);
+        }
+
+         setMarksMap({})
+         setExam("")
+         setTotalMark("")
       }
 
   return (

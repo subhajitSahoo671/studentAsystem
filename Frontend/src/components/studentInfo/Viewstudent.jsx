@@ -21,17 +21,17 @@ function Viewstudent({id, onClose}) {
       setLoading(true)
       try {
         const responnse = await axios.get("http://localhost:4000/api/v1/admin/viewstudents");
-        if(responnse){
+        if(responnse.status === 200){
           const std=responnse.data.find(student=> student._id == id)
           setStudents(std)
           // console.log(std);
         }
         else{
-          console.error(responnse.data);
+          console.error(responnse.data.error);
         }
       } catch (error) {
-              alert(error)
-              console.log(error);   
+              alert(error.response.data.error)
+              console.error(error);
       }
       finally{
               setLoading(false)

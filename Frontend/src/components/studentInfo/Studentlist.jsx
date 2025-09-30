@@ -45,7 +45,7 @@ const Studentlist = () => {
           setLoading(true)
           try {
             const responnse =  await axios.get("http://localhost:4000/api/v1/admin/viewstudents");
-            if (responnse) {
+            if (responnse.status === 200) {
               setAlldata(responnse.data)
             } else {
               console.error(responnse.data);

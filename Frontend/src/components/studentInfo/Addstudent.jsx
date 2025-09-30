@@ -75,7 +75,7 @@ function Addstudent() {
     setYear("");
   }
   return (
-    <div className='bg-gradient-to-b from-amber-50 to-teal-100 h-full lg:h-screen '>
+    <div className='bg-gradient-to-b from-amber-50 to-teal-100  min-h-screen '>
   <form 
   onSubmit={(e)=> {
     handleSubmit(e);

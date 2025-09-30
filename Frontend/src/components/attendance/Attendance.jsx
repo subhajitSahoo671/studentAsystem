@@ -4,7 +4,8 @@ import DataTable from 'react-data-table-component'
 import { colomns, AttendanceButtons } from './AttendanceDataTable'
 import Selectdepartment from '../Selectdepartment'
 //import studentinfo from "../../assets/studentInfo.json"
-import attendance from "../../assets/attendance.json"
+//import attendance from "../../assets/attendance.json"
+import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
@@ -17,10 +18,13 @@ const Attendance = () => {
                     department: "",
                     year: ""
                   });
+      //const [updatedAttendance, setUpdatedAttendance] = useState(false);
 
-     const statusChange = () => {
-      fetchStudents();
-      filterstudent();
+     const statusChange = (formdata) => {
+      //setUpdatedAttendance(true);
+      fetchStudents(formdata);
+      //filterstudent(formdata);
+      
      }
 
      const listref = React.useRef("");
@@ -44,15 +48,26 @@ const Attendance = () => {
              window.location.reload();
            }
 
-      const fetchStudents = () => {
+      const fetchStudents = async(formdata) => {
           setLoading(true)
           try {
-            const responnse = attendance;
-            setAlldata(responnse)
+            const responnse = await axios.get("http://localhost:4000/api/v1/admin/takeattendance");
+           if (responnse.data.success) {
+           const Alldata = responnse.data.attendanceRecords;
+             setAlldata(Alldata);
+             //console.log(Alldata);
+
+             if(formdata){
+              filterstudent(formdata, Alldata);
+              console.log("Filtered after update");
+              
+              //setUpdatedAttendance(false);
+             }
+           } else {
+             console.error("Error fetching attendance data:", responnse.data.error);
+           }
           } catch (error) {
-            if(!responnse){
-              alert(error)
-            }
+            console.error("Error fetching attendance data:", error);
           }
            finally{
               setLoading(false)
@@ -63,20 +78,19 @@ const Attendance = () => {
         fetchStudents()
       },[])
 
-       const filterstudent = (formdata) => {
-         const filteredStudent = alldata.filter(std => {
-           if(std){
-             return((std.department == formdata.department)&&(std.year == (formdata.year?formdata.year:std.year)))
-           }
-         })  
+       const filterstudent = (formdata, Alldata) => {
+         const filteredStudent = (Alldata?Alldata:alldata).filter(std => 
+          (std.stdId.department == formdata.department)&&(std.stdId.year == (formdata.year?formdata.year:std.stdId.year))
+         )  
                  if(filteredStudent){
                     const data = filteredStudent.map((std) => ({
-                      name: <div className='flex flex-col py-3 md:py-0'><div className='font-semibold text-[15px] md:font-normal md:text-[13.5px]'>{std.fullName}</div><div className='md:hidden block'>Roll No. - {std.rollNo}</div></div>,
-                      Department: std.department,
-                      Roll_No: std.rollNo,
-                      Action: (<AttendanceButtons status={std.status} Id={std.rollNo} statusChange={statusChange} />) 
+                      name: <div className='flex flex-col py-3 md:py-0'><div className='font-semibold text-[15px] md:font-normal md:text-[13.5px]'>{std.stdId.studentName}</div><div className='md:hidden block'>Roll No. - {std.stdId.rollNo}</div></div>,
+                      Department: std.stdId.department,
+                      Roll_No: std.stdId.rollNo,
+                      Action: (<AttendanceButtons status={std.status} Id={std.stdId._id} statusChange={statusChange} formdata={formdata} />) 
                     }))
-                    setStudents(data)
+                    setStudents(data);
+                     //console.log(alldata);
                     //setFilteredStudentDep(data)
       }
     }

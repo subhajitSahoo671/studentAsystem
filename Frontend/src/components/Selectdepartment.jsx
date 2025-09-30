@@ -28,7 +28,7 @@ function Selectdepartment({onChange,showList,formData,heading}) {
   return (
            <form 
     onSubmit={(e) => {handleSubmit(e)}}
-    className='lg:w-[20%] border-2 w-full px-10 py-20  bg-gradient-to-br from-[#cf50cf] to-[#2a97e6] h-screen text-white shadow-lg overflow-hidden lg:block' ref={departmentRef}>
+    className='lg:w-[20%] border-2 w-full px-10 py-20  bg-gradient-to-br from-[#de5ade] to-[#2a97e6] h-screen text-white shadow-lg overflow-hidden lg:block' ref={departmentRef}>
 
       <h3 className='lg:hidden w-full text-center text-2xl font-bold'>{heading}</h3>
 
