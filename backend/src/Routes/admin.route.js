@@ -9,6 +9,7 @@ import {
   markAttendance,
   takeAttendance,
   UpdateStudent,
+  Viewresult,
 } from "../controller/admin.controller.js";
 import adminMiddleware from "../middleware/admin.mid.js";
 import defaultAttendanceMiddleware from "../middleware/defaultAttendance.mid.js";
@@ -40,5 +41,9 @@ router.get("/attendanceReport",
 router.post("/addresult",
   //adminMiddleware,
   addresult);
+router.get("/Viewresult",
+  //adminMiddleware, 
+  Viewresult
+);
 
 export default router;

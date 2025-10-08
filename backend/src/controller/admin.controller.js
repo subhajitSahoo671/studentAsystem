@@ -439,7 +439,7 @@ export const attendanceReport = async (req, res) => {
     res.status(200).json({ attendanceRecords, groupedRecords, success: true });
   } catch (error) {
     console.log("ERROR !! in attendanceReport controller:", error);
-    res.status(500).json({ error: error.message, success: false });
+    res.status(500).json({ error: error, success: false });
   }
 }
   
@@ -464,5 +464,35 @@ export const addresult = async (req,res) => {
    console.log("ERROR !! in addresult controller:", error);
    res.status(500).json({ error: error.message, success: false });
  }
+}
 
+//view result
+export const Viewresult = async (req, res) => {
+  try {
+    const { limit = 5, skip = 0} = req.query;
+
+   // const totalRecords = await takeattendance.countDocuments(query);
+    const ResultRecords = await Result.find({})
+      .populate({
+        path: 'studentId',
+        select: 'studentName rollNo department year'
+      })
+      .sort({createdAt: -1})
+      .skip(parseInt(skip))
+      .limit(parseInt(limit))
+
+      const groupedRecords = ResultRecords.reduce((result, record) => {
+        const recordExam = record.marks.Exam;
+        if (!result[recordExam]) {
+          result[recordExam] = [];
+        }
+        result[recordExam].push(record);
+        return result;
+      }, {});
+
+    res.status(200).json({ ResultRecords, groupedRecords, success: true });
+  } catch (error) {
+    console.log("ERROR !! in Viewresult controller:", error);
+    res.status(500).json({ error: error.message, success: false });
+  }
 }
