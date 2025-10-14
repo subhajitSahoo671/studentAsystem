@@ -6,6 +6,7 @@ import config from "../../config.js";
 import { v2 as cloudinary } from "cloudinary";
 import { takeattendance } from "../models/takeAttendance.model.js";
 import {Result} from "../models/addResult.model.js";
+import {FeesSchema} from  "../models/payFees.model.js";
 
 //admin login
 export const adminLogin = async (req, res) => {
@@ -207,7 +208,7 @@ export const adminViewAllStudents = async (req, res) => {
 
 //admin update student
 export const UpdateStudent = async (req, res) => {
-  const { studentId } = req.params;
+  const { Id } = req.params;
   const {
     studentName,
     rollNo,
@@ -252,7 +253,7 @@ export const UpdateStudent = async (req, res) => {
     //   return res.status(400).json({ error: 'ERROR !! in uploading file to cloudinary' });
     // }
 
-    const existStudent = await StudentSchema.findById({ _id: studentId });
+    const existStudent = await StudentSchema.findById({ _id: Id });
     if (!existStudent) {
       console.log("❌ERROR !! student not detail found");
       return res.status(404).json({ error: "Student not detail found" });
@@ -299,10 +300,10 @@ export const UpdateStudent = async (req, res) => {
 
 //delete student
 export const deleteStudent = async (req, res) => {
-  const { studentId } = req.params;
+  const { Id } = req.params;
 
   try {
-    const existStudent = await StudentSchema.findById({ _id: studentId });
+    const existStudent = await StudentSchema.findById({ _id: Id });
     if (!existStudent) {
       console.log("❌ERROR !! student not found");
       return res.status(404).json({ error: "Student not found" });
@@ -379,14 +380,14 @@ export const takeAttendance = async (req, res) => {
 export const markAttendance = async (req, res) => {
 
   try {
-     const { studentId } = req.params;
+     const { Id } = req.params;
      const { status } = req.body;
      const date = new Date().toISOString().split('T')[0]; // Get current date in "yyyy-mm-dd" format
 
-    // if (!studentId || !status) {
-    //   return res.status(400).json({ error: "Student ID and status are required" ,studentId, status});
+    // if (!Id || !status) {
+    //   return res.status(400).json({ error: "Student ID and status are required" ,Id, status});
     // }
-    const student = await StudentSchema.findById({ _id: studentId });
+    const student = await StudentSchema.findById({ _id: Id });
     if (!student) {
       return res.status(404).json({ error: "Student not found" });
     }
@@ -451,11 +452,11 @@ export const addresult = async (req,res) => {
    if(!marks || Object.keys(marks).length === 0){
      return res.status(400).json({error:"please provide all required fields"});
    }
-    const studentIds = Object.keys(marks);
-   const results = studentIds.map(studentId => {
+    const Ids = Object.keys(marks);
+   const results = Ids.map(Id => {
      return {
-       studentId,
-       marks: marks[studentId]
+       Id,
+       marks: marks[Id]
      };
    });
     await Result.insertMany(results);
@@ -494,5 +495,92 @@ export const Viewresult = async (req, res) => {
   } catch (error) {
     console.log("ERROR !! in Viewresult controller:", error);
     res.status(500).json({ error: error.message, success: false });
+  }
+}
+
+//Payfees
+export const Payfees = async (req, res) => {
+  try {
+    const { Id } = req.params;
+    if (!Id) {
+      console.log("student Id is required", Id);
+      return res.status(400).json({ error: "student Id is required", success: false });
+    }
+    const { 
+      date,
+      fees,
+    } = req.body;
+
+    // Find the student by Id
+    const student = await StudentSchema.findById(Id);
+    if (!student) {
+      return res.status(404).json({ error: "Student not found", success: false });
+    }
+
+const std = await FeesSchema.find({ stdId: student._id });
+
+   // Sum all previous paid fees
+const paidfees = std && std.length > 0
+  ? std.reduce((sum, rec) => sum + (rec.payFeesDetails?.feesAmount), 0)
+  : 0;
+
+const totalFees = 90000;
+
+if (totalFees < (paidfees + Number(fees))) {
+  return res.status(400).json({ error: "payment Amount is too high", success: false });
+}
+    // Create fees record
+    const feesData = new FeesSchema({
+      stdId: student._id,
+      paidFeesDetails: { 
+        totalFees: totalFees, 
+        paidFees: paidfees + Number(fees), 
+        remainingFees: totalFees - (paidfees + Number(fees))
+      },
+      payFeesDetails: {
+        feesAmount: Number(fees), 
+        feesDate: date 
+      },
+    });
+
+    const response = await feesData.save();
+    if (response) {
+      res.status(201).json({ message: "Fees paid successfully", success: true });
+    } else {
+      res.status(500).json({ error: "Failed to save fees", success: false });
+    }
+  } catch (error) {
+    console.log("ERROR !! in Payfees controller:", error);
+    res.status(500).json({ error: error.message, success: false });
+  }
+}
+
+//feesRecord
+
+export const feesRecord = async (req,res) => {
+  try {
+
+    const { Id } = req.params;
+
+    const student = await StudentSchema.findById(Id);
+    if (!student) {
+      return res.status(404).json({ error: "Student not found", success: false });
+    }
+
+    const feesrecord = await FeesSchema.find({stdId: student._id})
+    .populate({
+        path: 'stdId',
+        select: 'studentName rollNo department year'
+      })
+      .sort({createdAt: -1})
+
+      if(!feesrecord){
+        res.status(404).json({error: "No Record Found", success: false })
+      }
+
+      res.status(200).json({ feesrecord, success: true });
+  } catch (error) {
+      console.log("ERROR !! in feesrecord conotroller:", error);
+      res.status(500).json({ error: error.message, success: false });
   }
 }

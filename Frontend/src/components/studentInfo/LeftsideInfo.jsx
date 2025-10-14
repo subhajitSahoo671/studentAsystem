@@ -11,8 +11,8 @@ function LeftsideInfo({students}) {
        <h3 className='font-semibold text-gray-800 text-lg'>{students.DOB}{" "}</h3>
        <h3 className='font-semibold text-gray-800 text-lg'>{students.gender}</h3>
       </div>
-    <div className='w-[40%] md:w-full  md:ml-0 ml-5  md:mr-10 p-5 md:p-7.5 shadow-md bg-gradient-to-b from-white to-amber-50 md:mt-20 rounded-full md:h-[40%] styleFrame'>
-        <div  className='border shadow-md flex object-fill rounded-full' >
+    <div className='w-[40%] md:w-[90%]  md:ml-0 ml-5  md:mr-10 p-5 md:p-7.5 shadow-md bg-gradient-to-b from-white to-amber-50 md:mt-25 rounded-full h-fit styleFrame'>
+        <div  className='border w-[full] shadow-md flex object-fill rounded-full h-[102px] lg:h-[220px]' >
             <img src={students && students.image.url}
             className='flex object-fill w-full rounded-full' alt="file not found" />
         </div>

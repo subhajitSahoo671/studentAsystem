@@ -6,7 +6,9 @@ import {
   adminViewAllStudents,
   attendanceReport,
   deleteStudent,
+  feesRecord,
   markAttendance,
+  Payfees,
   takeAttendance,
   UpdateStudent,
   Viewresult,
@@ -45,5 +47,13 @@ router.get("/Viewresult",
   //adminMiddleware, 
   Viewresult
 );
+router.post("/payfees/:Id",
+  //adminMiddleware,
+  Payfees
+);
+router.get("/feesRecord/:Id",
+  //adminMiddleware,
+  feesRecord
+)
 
 export default router;

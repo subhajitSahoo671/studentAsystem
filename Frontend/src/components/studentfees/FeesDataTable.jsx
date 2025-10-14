@@ -3,7 +3,7 @@ export const colomns=[
           { name: 'Roll No', selector: (row) => row.Roll_No , hide:"md"},
           { name: 'Pay Fees', selector: (row) => row.Pay_Fees },
           { name: 'Pay Date', selector: (row) => row.Pay_Date },
-          //{ name: 'Remains Fees', selector: (row) => row.Remains_Fees },
+          { name: 'Remains Fees', selector: (row) => row.Remains_Fees , hide:"md"},
 ]
 
 // export const data = [

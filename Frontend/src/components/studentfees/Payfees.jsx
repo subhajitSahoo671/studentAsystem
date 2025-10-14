@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from 'react'
-import studentinfo from "../../assets/studentInfo.json"
+import axios from 'axios'
+//import studentinfo from "../../assets/studentInfo.json"
 
 function Payfees() {
       
   const [studentlist, setStudentlist] = useState([])
   const [loading, setLoading] = useState("")
 
-  const [studentname, setStudentname] = useState("")
+  const [studentName, setstudentName] = useState("")
   const [date, setDate] = useState("")
   const [fees, setFees] = useState("")
   const [regno, setRegno] = useState("")
   const [department, setDepartment] = useState("")
   const [year, setYear] = useState("")
+  const [selectedStudent, setSelectedStudent] = useState("")
 
   useEffect(() => {
-      const fetchStudents = () => {
+      const fetchStudents = async() => {
       setLoading(true)
       try {
-        const responnse = studentinfo;
-        if(responnse){
-          const stdlist=responnse.filter(std => (std.department == department)&&(std.year == year))
+        const responnse = await axios.get("http://localhost:4000/api/v1/admin/viewstudents");
+        if(responnse.status == 200){
+          const stdlist=responnse.data.filter(std => (std.department == department)&&(std.year == year))
+        //  console.log(stdlist);
           setStudentlist(stdlist)
+        }else{
+          console.error(responnse.data);
         }
       } catch (error) {
-        alert(error)
+        console.error(error);
       }
       finally{
               setLoading(false)
@@ -34,7 +39,9 @@ function Payfees() {
 
   const handleSelectName = (e) => {
     const selectedName = e.target.value;
-    const selectedStudent = studentlist.find(std => std.fullName === selectedName);
+    const selectedStudent = studentlist.find(std => std.studentName === selectedName);
+    //console.log(selectedStudent);
+    setSelectedStudent(selectedStudent);
     
     if (selectedStudent) {
       setRegno(selectedStudent.rollNo);
@@ -42,14 +49,14 @@ function Payfees() {
       setRegno("");
     }
     
-    setStudentname(selectedName);
+    setstudentName(selectedName);
   }
 
   // Function to handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const studentData = {
-      studentname,
+      studentName,
       date,
       regno,
       fees,
@@ -57,7 +64,25 @@ function Payfees() {
       year,
     }
     studentData && console.log("Student Data Submitted: ", studentData);
-    setStudentname("");
+   try {
+    const Id = selectedStudent._id;
+     const responnse = await axios.post(`http://localhost:4000/api/v1/admin/payfees/${Id}`,studentData,
+      {
+                 //    headers: {
+                    //     Authorization: `Bearer ${localStorage.getItem("adminToken")}`
+                    //    }
+      }
+    )
+    if (responnse.data.success) {
+      alert(responnse.data.message)
+    }
+    else{
+       alert(responnse.data.error)
+    }
+   } catch (error) {
+    console.error("Error paying fees:", error);
+   }
+    setstudentName("");
     setDate(""); 
     setRegno("");
     setFees("");
@@ -88,7 +113,7 @@ function Payfees() {
        value={department}
         onChange={(e) => setDepartment(e.target.value)} 
        className='bg-gray-50 w-full mt-1 py-1.5 md:py-2 px-3 md:px-4 rounded-md text-[17px] md:text-lg font-light'>
-        <option selected value={""}>{window.innerWidth > 768 ? "Select Department": "Select Dep." }</option>
+        <option value={""}>{window.innerWidth > 768 ? "Select Department": "Select Dep." }</option>
         <option>BCA</option>
         <option>BBA</option>
         <option>BBT</option>
@@ -103,7 +128,7 @@ function Payfees() {
       value={year}
       onChange={(e) => setYear(e.target.value)}
       className='bg-gray-50 w-full mt-1 py-1.5 md:py-2 px-3 md:px-4 rounded-md text-[17px] md:text-lg font-light'>
-        <option selected value={""}>Select Year</option>
+        <option value={""}>Select Year</option>
         <option value={1}>1st Year</option>
         <option value={2}>2nd Year</option>
         <option value={3}>3rd Year</option>
@@ -119,14 +144,14 @@ function Payfees() {
       <label htmlFor="FullName" className=' pt-2 md:pt-3'>Full Name</label>
       <select name="FullName" id='FullName' 
       required
-      value={studentname}
+      value={studentName}
       onChange={(e) => handleSelectName(e)}
       className='bg-gray-50 w-full mt-1 py-1.5 md:py-2 px-3 md:px-4 rounded-md text-[17px] md:text-lg font-light'>
-        <option selected value={""}>Select name</option>
+        <option value={""}>Select name</option>
         {
           studentlist.map((std) => (
-          <option key={std.rollNo} value={std.fullName}>
-             {std.fullName}
+          <option key={std.rollNo} value={std.studentName}>
+             {std.studentName}
           </option>
               ))
         }
@@ -146,7 +171,7 @@ function Payfees() {
     <div className='flex justify-between mb-3 w-full'>
       <div className='flex flex-col w-[50%] mr-3'>
         <label htmlFor="Pay Fees" className=' pt-2 md:pt-3 '>Pay Fees</label>
-        <input type="text" placeholder='Amount' 
+        <input type="number" placeholder='Amount' 
       required
       value={fees}
       onChange={(e) => setFees(e.target.value)}

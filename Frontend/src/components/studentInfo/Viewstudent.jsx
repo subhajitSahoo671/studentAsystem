@@ -51,7 +51,7 @@ function Viewstudent({id, onClose}) {
       <div className='md:px-10 h-full md:bg-gradient-to-b from-white to-green-100 flex md:flex-row flex-col md:w-[80%]'>
         <button 
         onClick={onClose}
-        className='fixed  cursor-pointer px-2 py-[1px] mt-18 text-xl font-extrabold text-black rounded-full 
+        className='fixed  cursor-pointer px-2 py-[1px] mt-15 md:mt-18 text-xl font-extrabold text-black rounded-full 
          hover:text-blue-700'>
           <FontAwesomeIcon icon={faArrowLeft} /></button>
         <LeftsideInfo students={students} />
