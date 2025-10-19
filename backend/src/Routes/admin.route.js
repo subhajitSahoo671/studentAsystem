@@ -26,14 +26,14 @@ router.get("/viewstudents", adminViewAllStudents);
 router.put("/updatestudent/:studentId", 
   //adminMiddleware, 
   UpdateStudent);
-router.delete("/deletestudent/:studentId",  
+router.delete("/deletestudent/:Id",  
   //adminMiddleware,
   deleteStudent);
 router.get("/takeattendance",
   //adminMiddleware, 
   defaultAttendanceMiddleware,
   takeAttendance);
-router.put("/markAttendance/:studentId",
+router.put("/markAttendance/:Id",
   //adminMiddleware, 
   markAttendance);
 router.get("/attendanceReport",

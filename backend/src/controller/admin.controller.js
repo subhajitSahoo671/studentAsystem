@@ -455,7 +455,7 @@ export const addresult = async (req,res) => {
     const Ids = Object.keys(marks);
    const results = Ids.map(Id => {
      return {
-       Id,
+       studentId: Id,
        marks: marks[Id]
      };
    });

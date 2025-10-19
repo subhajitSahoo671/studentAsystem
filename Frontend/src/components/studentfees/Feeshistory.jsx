@@ -82,9 +82,9 @@ const Feeshistory = ({id, onClose }) => {
    
    <div className='flex justify-between items-center'>
     <div className='flex md:flex-row flex-col gap-2'>
-      <h3 className='px-4 py-1 text-[15px] font-semibold bg-[#38accf] rounded text-white'>Coures Fees : { responnse.paidFeesDetails?.totalFees} /-</h3>
-      <h3 className='px-4 py-1 text-[15px] font-semibold bg-[#2a97e6] rounded text-white hidden lg:block'>Paid Fees : {responnse.paidFeesDetails?.paidFees} /-</h3>
-      <h3 className='px-4 py-1 text-[15px] font-semibold bg-[#ce63ce] rounded text-white'>Ramaining Fees : {responnse.paidFeesDetails?.remainingFees} /-</h3>
+      <h3 className='px-4 py-1 text-[15px] font-semibold bg-[#38accf] rounded text-white'>Coures Fees : { responnse?.paidFeesDetails?.totalFees} /-</h3>
+      <h3 className='px-4 py-1 text-[15px] font-semibold bg-[#2a97e6] rounded text-white hidden lg:block'>Paid Fees : {responnse?.paidFeesDetails?.paidFees} /-</h3>
+      <h3 className='px-4 py-1 text-[15px] font-semibold bg-[#ce63ce] rounded text-white'>Ramaining Fees : {responnse?.paidFeesDetails?.remainingFees} /-</h3>
     </div>
     <Link to={"/payfees"} className='px-4 py-1 bg-gradient-to-br from-[#cf50cf] to-[#2a97e6] rounded text-white'>Pay Fees</Link>
    </div>

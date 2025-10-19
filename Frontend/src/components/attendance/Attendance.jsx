@@ -80,7 +80,7 @@ const Attendance = () => {
 
        const filterstudent = (formdata, Alldata) => {
          const filteredStudent = (Alldata?Alldata:alldata).filter(std => 
-          (std.stdId.department == formdata.department)&&(std.stdId.year == (formdata.year?formdata.year:std.stdId.year))
+          (std.stdId?.department == formdata.department)&&(std.stdId.year == (formdata.year?formdata.year:std.stdId.year))
          )  
                  if(filteredStudent){
                     const data = filteredStudent.map((std) => ({

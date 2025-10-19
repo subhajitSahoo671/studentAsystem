@@ -84,11 +84,11 @@ function AttendanceReport() {
           </thead>
           <tbody>
             {records && records.map((data, i) => (
-              <tr key={data.stdId._id} className='odd:bg-amber-50 odd:text-[#da5fda]'>
+              <tr key={data.stdId?._id} className='odd:bg-amber-50 odd:text-[#da5fda]'>
                 <td className='px-5 md:px-10 lg:px-13 py-1.5 rounded-l-md'>{i + 1}</td>
-                <td className='px-5 md:px-10 lg:px-13 py-1.5  hidden md:block'>{data.stdId.studentName}</td>
-                <td className='px-5 md:px-10 lg:px-13 py-1.5 '>{data.stdId.rollNo}</td>
-                <td className='px-5 md:px-10 lg:px-13 py-1.5  hidden lg:block'>{data.stdId.department}</td>
+                <td className='px-5 md:px-10 lg:px-13 py-1.5  hidden md:block'>{data.stdId?.studentName}</td>
+                <td className='px-5 md:px-10 lg:px-13 py-1.5 '>{data.stdId?.rollNo}</td>
+                <td className='px-5 md:px-10 lg:px-13 py-1.5  hidden lg:block'>{data.stdId?.department}</td>
                 <td className='pl-8 pr-5 md:px-10 lg:px-13 py-1.5 rounded-r-md '>{data.status ? data.status : "Not Marked"}</td>
               </tr>
             ))}
